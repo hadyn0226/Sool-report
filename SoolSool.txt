@@ -1,0 +1,474 @@
+create table sooltype (
+	sooltype_no number not null primary key,
+	sooltype_name varchar2(15) not null
+);
+
+create sequence sooltype_seq;
+
+create table catedetail (
+	catedetail_no number not null primary key,
+	catedetail_section varchar2(30) not null,
+	catedetail_name varchar2(30)
+);
+
+create sequence catedetail_seq;
+
+create table category (
+	category_no number not null constraint category_pk primary key,
+	category_producttype number not null,
+	catedetail_no number not null references catedetail(catedetail_no),
+	sooltype_no number not null constraint sootype_fk references sooltype(sooltype_no)
+);
+
+create sequence category_seq;
+
+create table ppackage (
+	ppackage_no number not null constraint package_pk primary key,
+	ppackage_name varchar2(45) not null
+);
+
+create sequence ppackage_seq;
+
+create table mcompany (
+	mcompany_no number not null constraint mcompany_pk primary key,
+	mcompany_nation varchar2(100) not null,
+	mcompany_phone varchar2(100) not null,
+	mcompany_email varchar2(100) not null,
+	mcompany_name varchar2(100) not null,
+	mcompany_mailordernum varchar2(100) not null,
+	mcompany_address varchar2(100) not null,
+	mcompany_registrationnum varchar2(100) not null,
+	mcompany_ceoname varchar2(100) not null,
+	mcompany_story varchar2(100) not null,
+	product_no number not null,
+	mbrand_no number not null
+);
+
+create sequence mcompany_seq;
+
+create table product (
+	product_no number not null constraint product_pk primary key,
+	product_name varchar2(45) not null,
+	product_img varchar2(100) not null,
+	product_tag1 varchar2(45) not null,
+	product_tag2 varchar2(45) not null,
+	product_star number,
+	product_rcnt number,
+	product_discount number,
+	product_intro varchar2(90) not null,
+	product_alcohol number,
+	product_update date not null,
+	product_price number not null,
+	product_wish number not null,
+	category_no number not null,
+	package_no number
+);
+
+create sequence product_seq;
+
+create table mbrand (
+	mbrand_no number not null constraint mbrand_pk primary key,
+	mcompany_no number not null,
+	mbrand_name varchar2(100) not null
+);
+create sequence mbrand_seq;
+
+create table poption (
+	poption_no number not null constraint poption_pk primary key,
+	product_no number not null references product(product_no),
+	poption_contents varchar2(45) not null,
+	poption_cnt number not null
+);
+
+create sequence poption_seq;
+
+create table pstock (
+	pstock_no number not null constraint pstock_pk primary key,
+	product_no number not null references product(product_no),
+	pstock_cnt number not null
+);
+
+create sequence pstock_seq;
+
+create table minfo (
+	minfo_no number not null constraint minfo_pk primary key,
+	product_no number not null references product(product_no),
+	minfo_texture varchar2(1000) not null,
+	minfo_component varchar2(1000) not null,
+	minfo_size varchar2(1000) not null,
+	minfo_releasedate date not null,
+	mcompany_no number not null,
+	minfo_madenation varchar2(1000) not null,
+	minfo_importdeclaration varchar2(1000) not null,
+	minfo_qualityassurancecriteria varchar2(1000) not null
+);
+
+create sequence minfo_seq;
+
+create table mfoodinfo (
+	mfoodinfo_no number not null constraint mfoodinfo_pk primary key,
+	mfoodinfo_type varchar2(1000) not null,
+	mfoodinfo_name varchar2(100) not null,
+	mfoodinfo_address varchar2(1000) not null,
+	mfoodinfo_nutrition varchar2(1000) not null,
+	mfoodinfo_gene varchar2(1000) not null,
+	mfoodinfo_lawconfirm varchar2(1000) not null,
+	product_no number not null
+);
+
+create sequence mfoodinfo_seq;
+
+create table ingredient (
+	ingredient_no varchar2(1000) not null constraint ingredient_pk primary key,
+	ingredient_name varchar2(1000) not null,
+	product_no number not null,
+	ingredient_amount number,
+	ingredient_unit varchar2(10)
+);
+
+create sequence ingredient_seq;
+
+create table selldate (
+	selldate_no varchar2(1000) not null constraint selldate_pk primary key,
+	selldate_date date not null,
+	product_no number
+);
+
+create sequence selldate_seq;
+
+create table smng (
+	smng_no varchar2(1000) not null constraint smng_pk primary key,
+	smng_cnt number not null,
+	product_no number not null
+);
+
+create sequence smng_seq;
+
+create table bottle (
+	bottle_no number not null constraint bottle_pk primary key,
+	bottle_amount number,
+	bottle_unit varchar2(15) not null,
+	product_no number not null
+);
+
+create sequence bottle_seq;
+
+create table keep (
+	keep_no number not null constraint keep_pk primary key,
+	keep_how varchar2(30) not null,
+	product_no number not null
+);
+
+create sequence keep_seq;
+
+create table ffilter (
+	ffilter_no number not null constraint ffilter_pk primary key,
+	ffilter_name varchar2(30),
+	ffilter_content varchar2(30)
+);
+
+create sequence ffilter_seq;
+
+create table vfilter (
+	vfilter_no number not null constraint vfilter_pk primary key,
+	vfilter_name varchar2(30),
+	vfilter_content varchar2(30)
+);
+
+create sequence vfilter_seq;
+
+create table gLine(
+gLine_no number constraint gLine_pk primary key,
+gLine_name varchar2(100) not null,
+gLine_line number not null,
+gLine_benefit number not null
+);
+
+create sequence gLine_seq;
+
+create table grade(
+grade_no number constraint grade_pk primary key,
+gLine_no number not null,
+grade_update number not null,
+constraint gLine_grade_fk foreign key(gLine_no) references gLine(gLine_no) on delete cascade
+);
+
+create sequence grade_seq;
+
+create table uuser(
+uuser_no number constraint uuser_pk primary key,
+grade_no number not null,
+uuser_name varchar2(100) not null,
+uuser_type number,
+uuser_nickname varchar2(100) not null,
+uuser_img varchar2(100) not null,
+uuser_intro varchar2(100) not null,
+uuser_joindate date not null,
+uuser_update date not null,
+uuser_address varchar2(1000) not null,
+uuser_status number not null,
+uuser_agree number not null,
+uuser_phone varchar2(20) not null,
+uuser_email varchar2(50) not null,
+uuser_birth date not null,
+uuser_gender number not null,
+uuser_authdate date not null,
+uuser_snsid varchar2(100) not null,
+uuser_snscode1 varchar2(100) not null,
+uuser_snscode2 varchar2(100) not null,
+uuser_id varchar2(15) not null,
+uuser_password varchar2(100) not null,
+uuser_salt varchar2(20) not null,
+uuser_lastdate date not null,
+uuser_echeck number not null,
+uuser_scheck number not null,
+constraint uuser_fk foreign key(grade_no) references grade(grade_no) on delete cascade
+);
+
+create sequence uuser_seq;
+
+create table withdrawal(
+withdrawal_no number constraint withdrawal_pk primary key,
+uuser_no number not null,
+withdrawal_reason varchar2(3000) not null,
+withdrawal_date date not null,
+constraint withdrawal_fk foreign key(uuser_no) references uuser(uuser_no) on delete cascade
+);
+
+create sequence withdrawal_seq;
+
+create table wishlist(
+wishlist_no number constraint wishlist_pk primary key,
+uuser_no number not null,
+product_no number not null,
+constraint uuser_wishlist_fk foreign key(uuser_no) references uuser(uuser_no) on delete cascade,
+constraint product_wishlist_fk foreign key(product_no) references product(product_no) on delete cascade
+);
+
+create sequence wishlist_seq;
+
+create table cart(
+cart_no number constraint cart_pk primary key,
+uuser_no number not null,
+product_no number not null,
+cart_cnt number not null,
+cart_stock number not null,
+cart_date date not null,
+constraint uuser_cart_fk foreign key(uuser_no) references uuser(uuser_no) on delete cascade,
+constraint product_cart_fk foreign key(product_no) references product(product_no) on delete cascade
+);
+
+create sequence cart_seq;
+
+create table coupon(
+    coupon_no number constraint coupon_pk primary key,
+    coupon_name varchar2(300) not null,
+    coupon_edate number not null,
+    coupon_benefit number not null,
+    product_no number not null,
+    constraint product_coupon_fk foreign key(product_no) references product(product_no) on delete cascade
+);
+
+create sequence coupon_seq nocache;
+
+create table cserial(
+    cserial_no number constraint cserial_pk primary key,
+    cserial_edate_start date not null,
+    cserial_edate_end date not null,
+    cserial_serial varchar2(30) not null unique,
+    cserial_status number not null,
+    coupon_no number not null,
+    constraint coupon_cserial_fk foreign key(coupon_no) references coupon(coupon_no) on delete cascade
+);
+
+create sequence cserial_seq nocache;
+
+create table cdetail(
+    cdetail_no number constraint cdetail_pk primary key,
+    coupon_no number not null,
+    uuser_no number not null,
+    cserial_no number not null,
+    constraint coupon_cdetail_fk foreign key(coupon_no) references coupon(coupon_no) on delete cascade,
+    constraint uuser_cdetail_fk foreign key(uuser_no) references uuser(uuser_no) on delete cascade,
+    constraint cserial_cdetail_fk foreign key(cserial_no) references cserial(cserial_no) on delete cascade
+);
+
+create sequence cdetail_seq nocache;
+
+create table mngdelivery(
+    mngdelivery_no number constraint mngdelivery_pk primary key,
+    mngdelivery_address varchar2(1000) not null,
+    mngdelivery_detail varchar2(1000) not null,
+    mngdelivery_memo varchar2(1000),
+    mngdelivery_basic number,
+    mngdelivery_dname varchar2(1000),
+    mngdelivery_pname varchar2(1000) not null,
+	mngdelivery_zipcode varchar2(1000),
+    uuser_no number not null,
+    constraint uuser_mngdelivery_fk foreign key(uuser_no) references uuser(uuser_no) on delete cascade
+);
+
+create sequence mngdelivery_seq nocache;
+
+create table review(
+review_no number constraint review_pk primary key,
+user_no number not null,
+product_no number not null,
+review_star number not null,
+review_photo varchar2(100),
+review_content varchar2(1000),
+review_date date not null,
+review_pcheck number,
+coupon_no number,
+constraint coupon_review_fk foreign key(coupon_no) references coupon(coupon_no) on delete cascade,
+constraint product_review_fk foreign key(product_no) references product(product_no) on delete cascade
+);
+
+create sequence review_seq;
+
+create table odoption(
+    odoption_no number constraint odoption_pk primary key,
+    product_no number not null,
+    constraint product_odoption_fk foreign key(product_no) references product(product_no) on delete cascade,
+    odoption_cnt number not null
+);
+
+create sequence odoption_seq nocache;
+
+create table pOrder(
+    pOrder_no number constraint pOrder_pk primary key,
+    uuser_no number not null,
+    pOrder_date Date not null,
+    pOrder_pdate Date not null,
+    pOrder_ptotal number not null,
+    pOrder_pno number not null,
+    product_no number not null,
+    pOrder_ccheck varchar2(1000) not null,
+    pOrder_pcheck varchar2(1000) not null,
+    pOrder_pused number not null,
+    coupon_no number not null,
+    pstock_no number not null,
+    pOrder_pay number not null,
+    pOrder_dtotal number not null,
+    pOrder_pstatus varchar2(1000) not null,
+    pOrder_gcheck number not null,
+    odoption_no number not null,
+    constraint pOrder_fk foreign key(uuser_no) references uuser(uuser_no) on delete cascade,
+    constraint product_pOrder_fk foreign key(product_no) references product(product_no) on delete cascade,
+    constraint coupon_pOrder_fk foreign key(coupon_no) references coupon(coupon_no) on delete cascade,
+    constraint products_pOrder_fk foreign key(pstock_no) references pstock(pstock_no) on delete cascade,
+    constraint odoption_pOrder_fk foreign key(odoption_no) references odoption(odoption_no) on delete cascade
+);
+
+create sequence pOrder_seq nocache;
+
+create table pdetail(
+    pdetail_no number constraint pdetail_pk primary key,
+    pdetail_usedate date not null,
+    pdetail_useinfo number not null,
+    uuser_no number not null,
+    pOrder_no number not null,
+    constraint uuser_pdetail_fk foreign key(uuser_no) references uuser(uuser_no) on delete cascade,
+    constraint pOrder_pdetail_fk foreign key(pOrder_no) references pOrder(pOrder_no) on delete cascade
+);
+
+create sequence pdetail_seq nocache;
+
+create table point(
+    point_no number constraint point_pk primary key,
+    point_my number not null,
+    point_able number not null,
+    point_extinction number not null,
+    point_reason varchar2(100) not null,
+	point_start date not null,
+    point_end date not null,
+    pdetail_no number not null,
+    uuser_no number not null,
+    constraint pdetail_point_fk foreign key(pdetail_no) references pdetail(pdetail_no) on delete cascade,
+    constraint uuser_point_fk foreign key(uuser_no) references uuser(uuser_no) on delete cascade
+);
+
+create sequence point_seq nocache;
+
+create table gift(
+    gift_no number constraint gift_pk primary key,
+    gift_memo varchar2(1000) not null,
+    gift_pname varchar2(500) not null,
+    gift_pphone number not null,
+    pOrder_no number not null,
+    uuser_no number not null,
+    constraint pOrder_gift_fk foreign key(pOrder_no) references pOrder(pOrder_no) on delete cascade,
+    constraint uuser_gift_fk foreign key(uuser_no) references uuser(uuser_no) on delete cascade
+);
+
+create sequence gift_seq nocache;
+
+create table delivery(
+    delivery_no number constraint delivery_pk primary key,
+    delivery_charge number not null,
+    pOrder_no number not null,
+    uuser_no number not null,
+    mngdelivery_no number not null,
+    constraint uuser_delivery_fk foreign key(uuser_no) references uuser(uuser_no) on delete cascade,
+    constraint pOrder_delivery_fk foreign key(pOrder_no) references pOrder(pOrder_no) on delete cascade,
+    constraint mngdelivery_delivery_fk foreign key(mngdelivery_no) references mngdelivery(mngdelivery_no) on delete cascade
+);
+
+create sequence delivery_seq nocache;
+
+create table  distillery(
+Distillery_no number constraint distillery_pk primary key,
+Distillery_name varchar2(100) not null,
+Distillery_add varchar2(1000) not null,
+Distillery_phone varchar2(100) not null,
+Distillery_page varchar2(1000) not null,
+Distillery_type varchar2(100) not null,
+Distillery_Liquor varchar2(100) not null,
+Distillery_Tour number not null,
+Distillery_Reservation_Tour number not null,
+Distillery_Experience number not null
+);
+create sequence distillery_seq nocache;
+
+create table cs(
+    cs_no number constraint cs_pk primary key,
+    uuser_no number not null,
+    cs_title varchar2(300) not null,
+    cs_content clob not null,
+    cs_date date not null,
+    cs_hit number not null,
+    constraint uuser_cs_fk foreign key(uuser_no) references uuser(uuser_no) on delete cascade
+);
+
+    
+create sequence cs_seq nocache;
+
+create table admin (
+	admin_no number primary key,
+	admin_id varchar2(15) not null, 
+	admin_pw varchar2(15) not null,
+	admin_email varchar2(30) not null,
+	admin_phone varchar2(15) not null,
+	admin_name varchar2(30) not null ,
+	admin_team varchar2(30) not null,
+	admin_position varchar2(30) not null
+);
+
+
+CREATE sequence ADMIN_SEQ NOCACHE;
+
+insert into product values(product_seq.nextval, '더미',null,'태그1','태그2',0,0,0,'소개글',0,sysdate,10000,0,1,1);
+
+insert into GLINE values(gline_seq.nextVal,'브론즈',100000,5);
+
+insert into GRADE values(grade_seq.nextVal,1,SYSDATE);
+
+insert into uuser 
+   (uuser_no,grade_no,uuser_id,uuser_password,uuser_salt,uuser_name,uuser_nickname,uuser_email,uuser_phone,
+   uuser_gender,uuser_echeck,uuser_scheck,uuser_type,uuser_img,uuser_intro,uuser_joindate,uuser_update,uuser_address
+   ,uuser_status,uuser_agree,uuser_birth,uuser_authdate,uuser_snsid,uuser_snscode1,uuser_snscode2,uuser_lastdate)
+    values
+    (uuser_seq.nextVAL,1,'test','test01',1234,'test','test','test@gmail.com','010-0000-0000',
+    1,1,1,1,'test','test',null,null,'seoul',
+    1,1,null,null,null,'test','test',null);
+
